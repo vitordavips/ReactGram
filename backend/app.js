@@ -16,6 +16,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+// Solve cors - vai permite a interação com o domínio do frontend
+app.use(cors({credentials: true, origin:"http://localhost:3000"}));
+
+// Upload directory
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+
+//DB connection
+require("./config/db.js");
+
 //routes
 const router = require("./routes/Router");
 
