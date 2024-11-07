@@ -16,9 +16,21 @@ const generateToken = (id) => {
 
 // Registre o usuário e faça login
 const register = async(req, res) => {
-    res.send("Registro");
+    const {name, email, password} = req.body
+
+    //check se o usuário existe
+    const user = await User.findOne({email})
+    
+    if(user) {
+        res.status(442).json({errors:["Por favor, utilize outro e-mail"]})
+        return
+    }
+
+    // Generated password hash
+    const salt = await bcrypt.genSalt()
+    const passwordHash = await bcrypt.hash(password, salt)
 };
- 
+  
 module.exports = {
     register,
 }
