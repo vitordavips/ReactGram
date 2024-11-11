@@ -5,7 +5,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const jwtSecret = process.env.jwtSecret;
+ 
+const jwtSecret = process.env.JWT_SECRET;
 
 // Gerar token de usuário
 const generateToken = (id) => {
@@ -29,6 +30,24 @@ const register = async(req, res) => {
     // Generated password hash
     const salt = await bcrypt.genSalt()
     const passwordHash = await bcrypt.hash(password, salt)
+
+    // create user
+    const newUser = await User.create({
+        name,
+        email,
+        password: passwordHash
+    })
+
+    // If user was created successfully, return the token
+    if(!newUser){
+        res.status(422).json({errors:["houve um erro, por favor tente mais tarde."]});
+        return;
+    };
+
+    res.status(201).json({
+        _id: newUser._id,
+        token: generateToken(newUser._id)
+    });
 };
   
 module.exports = {
