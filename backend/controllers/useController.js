@@ -75,10 +75,17 @@ const login = async(req, res) => {
         profileImage: user.profileImage,
         token: generateToken(user._id),
     });
+};
 
+// Obtenha o usuário logado atual
+const getCurrentUser = async (req,res) =>{
+    const user = req.user;
+
+    res.status(200).json(user);
 };
   
 module.exports = {
     register,
-    login
-}
+    login,
+    getCurrentUser
+};
