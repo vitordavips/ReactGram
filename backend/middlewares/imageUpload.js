@@ -17,6 +17,21 @@ const imagemArmazenada = multer.diskStorage({
         cb(null, `uploads/${folder}/`)
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now())
+        cb(null, Date.now() + path.extname(file.originalname))
     }
-})
+});
+
+// validação da imagem e defenir onde ela vai ser salva
+const imageUpload = multer({
+    storage: imageStorage,
+    fileFilter(req, file, cb){
+        if(!file.originalname.match(/\.(png|jpg)$/)){
+            // upload dos formatos png e jpg
+            return cd(new Error("Por favor, envie apenas png ou jpg!"))
+        }
+
+        cb(undefined, true)
+    }    
+});
+
+module.exports = {imageUpload};
