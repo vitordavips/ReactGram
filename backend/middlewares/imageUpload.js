@@ -23,7 +23,7 @@ const imagemArmazenada = multer.diskStorage({
 
 // validação da imagem e defenir onde ela vai ser salva
 const imageUpload = multer({
-    storage: imageStorage,
+    storage: imagemArmazenada,
     fileFilter(req, file, cb){
         if(!file.originalname.match(/\.(png|jpg)$/)){
             // upload dos formatos png e jpg
