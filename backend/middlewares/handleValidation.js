@@ -1,22 +1,27 @@
-// lidando com erros
-const {validationResult} = require("express-validator")
+// Importa a função validationResult da biblioteca express-validator
+const { validationResult } = require("express-validator");
 
+// Middleware para validar requisições e lidar com erros
 const validate = (req, res, next) => {
+    // Obtém os resultados da validação dos dados da requisição
     const errors = validationResult(req);
 
-    // verificar se os erros estão vazios
-    if(errors.isEmpty()){
-        return next()
+    // Verifica se não existem erros; se estiver tudo certo, segue para o próximo middleware ou rota
+    if (errors.isEmpty()) {
+        return next();
     }
 
-    // coletando os erros
-    const extractedErros = []
+    // Cria um array para armazenar as mensagens de erro extraídas
+    const extractedErrors = [];
 
-    errors.array().map((err) => extractedErros.push(err.msg))
+    // Mapeia os erros encontrados e adiciona apenas as mensagens ao array
+    errors.array().map((err) => extractedErrors.push(err.msg));
 
+    // Retorna uma resposta com status 422 (Unprocessable Entity) e o array de mensagens de erro
     return res.status(422).json({
-        errors: extractedErros,
+        errors: extractedErrors,
     });
 };
 
+// Exporta o middleware para ser utilizado em validações no projeto
 module.exports = validate;
