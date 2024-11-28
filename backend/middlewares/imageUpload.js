@@ -1,37 +1,47 @@
-// o multer faz o upload dos arquivos
+// O multer é uma biblioteca para lidar com o upload de arquivos no Node.js
 const multer = require("multer");
-// o path fica responsavel pelos caminhos
+// O path é uma biblioteca do Node.js para trabalhar com caminhos de arquivos e diretórios
 const path = require("path");
 
-// destino de armazenamento da imagem
-const imagemArmazenada = multer.diskStorage({
+// Configuração do armazenamento para a imagem, usando multer
+const imageStorage = multer.diskStorage({
+    // A função `destination` define o diretório onde o arquivo será armazenado
     destination: (req, file, cb) => {
-        let folder = ""
+        let folder = "";  // Variável para armazenar o nome da pasta de destino
 
+        // Condicional para verificar se a URL da requisição contém 'users' ou 'photos'
         if(req.baseUrl.includes("users")){
-            folder = 'users'
+            folder = 'users';  // Se contiver 'users', a pasta será 'users'
         } else if(req.baseUrl.includes("photos")){
-            folder = "photos"
+            folder = "photos";  // Se contiver 'photos', a pasta será 'photos'
         };
 
-        cb(null, `uploads/${folder}/`)
+        // A função `cb` define o diretório final, que será a pasta 'uploads/seguida do nome da pasta definida acima'
+        cb(null, `uploads/${folder}/`);
     },
+    // A função `filename` define o nome do arquivo, gerando um nome único baseado no timestamp atual
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname))
+        // Usando `Date.now()` para garantir que o nome do arquivo seja único, e `path.extname` para manter a extensão original
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
-// validação da imagem e defenir onde ela vai ser salva
+// Configuração do multer para lidar com o upload, incluindo validação do tipo de arquivo
 const imageUpload = multer({
-    storage: imagemArmazenada,
+    // Passando a configuração de armazenamento definida anteriormente
+    storage: imageStorage,
+    // A função `fileFilter` define qual tipo de arquivo pode ser aceito
     fileFilter(req, file, cb){
+        // Verificando se o arquivo tem uma extensão .png ou .jpg
         if(!file.originalname.match(/\.(png|jpg)$/)){
-            // upload dos formatos png e jpg
-            return cd(new Error("Por favor, envie apenas png ou jpg!"))
+            // Se não for .png ou .jpg, rejeita o arquivo com uma mensagem de erro
+            return cb(new Error("Por favor, envie apenas png ou jpg!"));
         }
 
-        cb(undefined, true)
+        // Se for um arquivo válido, permite o upload
+        cb(undefined, true);
     }    
 });
 
-module.exports = {imageUpload};
+// Exportando a configuração do multer para ser utilizada em outros arquivos
+module.exports = { imageUpload };
