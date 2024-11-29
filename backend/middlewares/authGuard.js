@@ -25,10 +25,15 @@ const authGuard = async (req, res, next) => {
   try {
     // Verifica o token usando a chave secreta e retorna o payload decodificado
     const verified = jwt.verify(token, jwtSecret);
+    //console.log("Token verificado:", verified);
 
     // Busca o usuário no banco de dados pelo ID contido no token verificado
     // Utiliza 'select' para excluir o campo 'password' dos dados retornados
     req.user = await User.findById(verified.id).select("-password");
+    
+    if(!req.user){
+      return res.status(404).json({errors: ["Usuário não encontrado!"]})
+    }
 
     // Se tudo estiver correto, chama a próxima função middleware ou rota
     next();

@@ -142,9 +142,9 @@ const getUserById = async (req, res) => {
   const { id } = req.params; // Obtém o ID do usuário dos parâmetros da URL
 
   // Busca o usuário no banco de dados pelo ID, omitindo a senha
-  const user = await User.findById(mongoose.Types.ObjectId(id)).select(
-    "-password"
-  );
+  const user = await User.findById(new mongoose.Types.ObjectId(id)).select("-password");
+  
+  //const user = await User.findById(mongoose.Types.ObjectId(id)).select("-password");
 
   // Verifica se o usuário foi encontrado
   if (!user) {
