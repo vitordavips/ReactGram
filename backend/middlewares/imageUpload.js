@@ -44,4 +44,4 @@ const imageUpload = multer({
 });
 
 // Exportando a configuração do multer para ser utilizada em outros arquivos
-module.exports = { imageUpload };
+module.exports =  {imageUpload} ;

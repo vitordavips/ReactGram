@@ -6,9 +6,9 @@ const {insertPhoto} = require("../controllers/photoControlle.js");
 
 // Middlewares
 const { photoInsertValidation } = require("../middlewares/photoValidation.js");
-const { authGuard } = require("../middlewares/authGuard.js");
+const  authGuard  = require("../middlewares/authGuard.js");
 const validate = require("../middlewares/handleValidation.js");
-const  { imageUpload }  = require("../middlewares/imageUpload.js");
+const { imageUpload } = require("../middlewares/imageUpload.js");
 
 // Routes
 router.post("/", authGuard, imageUpload.single("image"), photoInsertValidation(), validate, insertPhoto);
