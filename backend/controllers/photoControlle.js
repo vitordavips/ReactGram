@@ -1,6 +1,8 @@
 // Importa o modelo 'Photo' que será usado para interagir com a coleção de fotos no banco de dados
 const Photo = require("../models/Photo");
 
+const User = require("../models/User");
+
 // Importa o Mongoose, uma biblioteca que facilita a interação com o MongoDB
 const mongoose = require("mongoose");
 
@@ -12,11 +14,26 @@ const insertPhoto = async (req, res) => {
     // Extrai o nome do arquivo da foto que foi enviado (req.file.filename)
     const image = req.file.filename;
 
-    // Exibe o corpo da requisição no console para fins de debug
-    console.log(req.body);
+    const reqUser = req.user;
 
-    // Envia uma resposta simples confirmando a inserção da foto
-    res.send("Photo insert");
+    const user = await User.findById(reqUser._id);
+
+    // create a photo
+    const newPhoto = await Photo.create({
+        image,
+        title,
+        userId:user.id,
+        userName:user.name,
+    });
+
+    // if photo was created successfully, return data
+    if(!newPhoto){
+        res.status(422).json({
+            errors:["Houve um problema, por favor tente novamente mais tarde."]
+        });
+    }
+    
+    res.status(201).json(newPhoto);
 };
 
 // Exporta a função 'insertPhoto' para que possa ser utilizada em outras partes do projeto
