@@ -8,35 +8,72 @@ const mongoose = require("mongoose");
 
 // Função assíncrona para inserir uma foto, associando-a a um usuário
 const insertPhoto = async (req, res) => {
-    // Extrai o campo 'title' do corpo da requisição (req.body)
     const { title } = req.body;
-    
-    // Extrai o nome do arquivo da foto que foi enviado (req.file.filename)
+
     const image = req.file.filename;
+
+    console.log(req.body);
 
     const reqUser = req.user;
 
     const user = await User.findById(reqUser._id);
 
-    // create a photo
+    console.log(user.name);
+
     const newPhoto = await Photo.create({
         image,
         title,
-        userId:user.id,
-        userName:user.name,
+        userId: user._id,
+        userName: user.name,
     });
 
-    // if photo was created successfully, return data
-    if(!newPhoto){
+    // If user was photo sucessfully, return data
+    if(!newPhoto) {
         res.status(422).json({
-            errors:["Houve um problema, por favor tente novamente mais tarde."]
+            errors:["Houve um erro, por favor tente novamente mais tarde."],
         });
+        return;
     }
-    
+
     res.status(201).json(newPhoto);
+};
+
+// Remove a photo from DB
+const deletePhoto = async (req, res) => {
+   const { id } = req.params;
+
+   const reqUser = req.user;
+
+   try {        
+        const photo = await Photo.findById(new mongoose.Types.ObjectId(id));
+
+        // check if photo exists
+        if(!photo){
+            res.status(404).json({errors: ["Foto não encontrada"]});
+            return;
+        };
+
+        console.log(photo);
+        console.log(photo.userId);
+
+        // check if photo belongs to user
+        if (!photo.userId.equals(reqUser._id)) {
+            return res.status(400).json({errors:["Você não pode excluir essa foto."]});
+        };
+
+        await Photo.findByIdAndDelete(photo._id);
+
+        res.status(200).json({id: photo._id, message:"Foto excluída com sucesso."});
+
+   } catch (error) {
+    console.log(error)
+    res.status(404).json({errors: ["Foto não encontrada"]});
+    return;
+   }
 };
 
 // Exporta a função 'insertPhoto' para que possa ser utilizada em outras partes do projeto
 module.exports = {
     insertPhoto,
+    deletePhoto,
 };

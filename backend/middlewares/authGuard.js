@@ -41,6 +41,8 @@ const authGuard = async (req, res, next) => {
     // Se a verificação do token falhar, retorna uma resposta de erro 400 (Requisição inválida)
     res.status(400).json({ errors: ["O Token é inválido!"] });
   }
+
+  console.log("Usuário autenticado", req.user);
 };
 
 // Exporta o middleware 'authGuard' para ser utilizado em rotas protegidas
