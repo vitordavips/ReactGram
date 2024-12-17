@@ -35,9 +35,18 @@ const authGuard = async (req, res, next) => {
       return res.status(404).json({errors: ["Usuário não encontrado!"]})
     }
 
+    
+
     // Se tudo estiver correto, chama a próxima função middleware ou rota
     next();
   } catch (err) {
+
+    console.log(err);
+
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ errors: ["Token expirado! Faça login novamente."] });
+    }
+    
     // Se a verificação do token falhar, retorna uma resposta de erro 400 (Requisição inválida)
     res.status(400).json({ errors: ["O Token é inválido!"] });
   }

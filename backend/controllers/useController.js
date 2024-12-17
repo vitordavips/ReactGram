@@ -16,7 +16,7 @@ const jwtSecret = process.env.JWT_SECRET;
 // Função para gerar um token JWT com base no ID do usuário
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
-    expiresIn: "7d", // Token expira em 7 dias
+    expiresIn: "7d",
   });
 };
 
