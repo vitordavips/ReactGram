@@ -7,52 +7,55 @@ const jwt = require("jsonwebtoken");
 // Obtém a chave secreta para assinar e verificar tokens JWT a partir das variáveis de ambiente
 const jwtSecret = process.env.JWT_SECRET;
 
-// Define um middleware de autenticação chamado 'authGuard'
 const authGuard = async (req, res, next) => {
-  // Obtém o cabeçalho 'authorization' da requisição (normalmente no formato 'Bearer TOKEN')
+  // onter o cabeçalho de autorização
   const authHeader = req.headers["authorization"];
-  
-  // Extrai o token do cabeçalho, se ele existir
+  console.log("headers recebidos:", req.headers);
+
+  // extrai o token
   const token = authHeader && authHeader.split(" ")[1];
+  console.log("token recebido", token);
 
-  // Verifica se o token foi fornecido no cabeçalho
-  if (!token) {
-    // Se não houver token, retorna uma resposta de erro 401 (Não autorizado)
-    return res.status(401).json({ errors: ["Acesso negado!"] });
+  if(!token){
+    console.log("erro: token não enviado");
+    return res.statu(401).json({errors: ["Acesso negado!"]});
   }
 
-  // Tenta verificar se o token é válido
   try {
-    // Verifica o token usando a chave secreta e retorna o payload decodificado
+    // tenta verificar o token
     const verified = jwt.verify(token, jwtSecret);
-    //console.log("Token verificado:", verified);
+    console.log("Token verificado:", verified);
 
-    // Busca o usuário no banco de dados pelo ID contido no token verificado
-    // Utiliza 'select' para excluir o campo 'password' dos dados retornados
-    req.user = await User.findById(verified.id).select("-password");
-    
+    // verificar se o usuário foi encontrado
     if(!req.user){
-      return res.status(404).json({errors: ["Usuário não encontrado!"]})
+      console.log("erro: usuário não encontraod");
+      return res.status(404).json({errors: ["usuário não encontrado"]})
     }
 
-    
+    jwt.verify(token, jwtSecret, {leeway:60}, (error, decoded) => {
+      if (error){
+        return res.status(401).json({message: 'token expirado ou inválido'});
+      }
+      req.user = decoded;
+    });
 
-    // Se tudo estiver correto, chama a próxima função middleware ou rota
+
     next();
-  } catch (err) {
+  } catch (error) {
+    console.log("erro ao varificar o token", error);
 
-    console.log(err);
-
-    if (err.name === "TokenExpiredError") {
-      return res.status(401).json({ errors: ["Token expirado! Faça login novamente."] });
+    // Erro de token expirado
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ errors: ["Token expirado! Faça login novamente."] });
     }
-    
-    // Se a verificação do token falhar, retorna uma resposta de erro 400 (Requisição inválida)
-    res.status(400).json({ errors: ["O Token é inválido!"] });
-  }
 
-  console.log("Usuário autenticado", req.user);
+    //erro genérico de token
+    res.status(400).json({errors:["O token é inválido"]})
+  }
 };
+
 
 // Exporta o middleware 'authGuard' para ser utilizado em rotas protegidas
 module.exports = authGuard;

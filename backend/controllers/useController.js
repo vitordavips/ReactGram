@@ -16,9 +16,11 @@ const jwtSecret = process.env.JWT_SECRET;
 // Função para gerar um token JWT com base no ID do usuário
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
-    expiresIn: "7d",
+    expiresIn: "1h",
   });
 };
+
+console.log(new Date)
 
 // Função para registrar um novo usuário e fazer login automático
 const register = async (req, res) => {
@@ -74,19 +76,25 @@ const login = async (req, res) => {
   if (!user) {
     res.status(404).json({ errors: ["Usuário não encontrado!"] });
     return;
-  }
+  };
 
   // Verifica se a senha fornecida corresponde à senha armazenada (hash)
   if (!(await bcrypt.compare(password, user.password))) {
     res.status(422).json({ errors: ["Senha inválida!"] });
     return;
-  }
+  };
+
+  const token = generateToken(user._id);
+  const decodedToken = jwt.decode(token);
+  // debug: para ver a data de expiração
+  console.log('token expira em:', new Date(decodedToken.exp * 1000).toISOString())
 
   // Retorna o ID, imagem de perfil e token JWT do usuário como resposta
   res.status(200).json({
     _id: user._id,
     profileImage: user.profileImage,
-    token: generateToken(user._id),
+    token: token,
+    //token: generateToken(user._id),
   });
 };
 
