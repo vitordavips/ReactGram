@@ -1,26 +1,17 @@
-// Importa o modelo 'User', que representa os dados do usuário no banco de dados MongoDB
 const User = require("../models/User");
 
-// Importa a biblioteca 'bcryptjs' para realizar o hash de senhas
 const bcrypt = require("bcryptjs");
-
-// Importa a biblioteca 'jsonwebtoken' para gerar e verificar tokens JWT
 const jwt = require("jsonwebtoken");
-
-// Importa a instância padrão do Mongoose para manipulação de dados no MongoDB
 const { default: mongoose } = require("mongoose");
 
-// Obtém a chave secreta JWT do arquivo de ambiente (.env)
 const jwtSecret = process.env.JWT_SECRET;
 
-// Função para gerar um token JWT com base no ID do usuário
+// Generate user token
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "1m",
   });
 };
-
-console.log(new Date)
 
 // Função para registrar um novo usuário e fazer login automático
 const register = async (req, res) => {
@@ -68,80 +59,66 @@ const getCurrentUser = async (req, res) => {
 
 // Função para fazer login do usuário
 const login = async (req, res) => {
-  const { email, password } = req.body; // Extrai o e-mail e a senha do corpo da requisição
+  const { email, password } = req.body;
 
-  const user = await User.findOne({ email }); // Busca o usuário pelo e-mail no banco de dados
+  const user = await User.findOne({ email });
 
-  // Verifica se o usuário existe
+  // Check if user exists
   if (!user) {
     res.status(404).json({ errors: ["Usuário não encontrado!"] });
     return;
-  };
+  }
 
-  // Verifica se a senha fornecida corresponde à senha armazenada (hash)
+  // Check if password matches
   if (!(await bcrypt.compare(password, user.password))) {
     res.status(422).json({ errors: ["Senha inválida!"] });
     return;
-  };
+  }
 
-  const token = generateToken(user._id);
-  const decodedToken = jwt.decode(token);
-  // debug: para ver a data de expiração
-  console.log('token expira em:', new Date(decodedToken.exp * 1000).toISOString())
-
-  // Retorna o ID, imagem de perfil e token JWT do usuário como resposta
+  // Return user with token
   res.status(200).json({
     _id: user._id,
     profileImage: user.profileImage,
-    token: token,
-    //token: generateToken(user._id),
+    token: generateToken(user._id),
   });
 };
 
 // Função para atualizar o perfil do usuário autenticado
 const update = async (req, res) => {
-  const { name, password, bio } = req.body; // Extrai os dados do corpo da requisição
+  const { name, password, bio } = req.body;
 
   let profileImage = null;
 
-  // Verifica se há uma imagem de perfil na requisição
   if (req.file) {
     profileImage = req.file.filename;
   }
 
-  const reqUser = req.user; // Obtém o usuário autenticado da requisição
+  const reqUser = req.user;
 
-  // Busca o usuário no banco de dados pelo ID, omitindo a senha na resposta
   const user = await User.findById(mongoose.Types.ObjectId(reqUser._id)).select(
     "-password"
   );
 
-  // Atualiza o nome, se fornecido
   if (name) {
     user.name = name;
   }
 
-  // Atualiza a senha, se fornecida
   if (password) {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
     user.password = passwordHash;
   }
 
-  // Atualiza a imagem de perfil, se fornecida
   if (profileImage) {
     user.profileImage = profileImage;
   }
 
-  // Atualiza a biografia, se fornecida
   if (bio) {
     user.bio = bio;
   }
 
-  // Salva as alterações no banco de dados
   await user.save();
 
-  // Retorna o usuário atualizado
   res.status(200).json(user);
 };
 
