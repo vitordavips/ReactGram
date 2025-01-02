@@ -18,13 +18,13 @@ const authGuard = async (req, res, next) => {
   try {
     const verified = jwt.verify(token, jwtSecret);
 
-    req.user = await User.findById(verified.id).select("-password");
+    req.user = await User.findByPk(verified.id).select("-password");
    
     console.log("token valido:", verified);
    
     next();
-  } catch (err) {
-    console.log(err)
+  } catch (errors) {
+    console.log(errors)
 
     if(err.name === "TokenExpiredError"){
       console.log("token expirado");

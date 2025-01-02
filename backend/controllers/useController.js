@@ -9,10 +9,10 @@ const jwtSecret = process.env.JWT_SECRET;
 // Generate user token
 const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
-    expiresIn: "1m",
+    expiresIn: "1d",
   });
 };
-
+ 
 // Função para registrar um novo usuário e fazer login automático
 const register = async (req, res) => {
   const { name, email, password } = req.body; // Extrai os dados do corpo da requisição
@@ -47,8 +47,8 @@ const register = async (req, res) => {
   // Retorna o ID do usuário e um token JWT como resposta
   res.status(201).json({
     _id: newUser._id,
-    token: generateToken(newUser._id), // Gera um token JWT para o usuário
-  });
+    token: generateToken(newUser._id)
+  })
 };
 
 // Função para obter o usuário atualmente logado
