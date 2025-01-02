@@ -1,38 +1,43 @@
 const User = require("../models/User");
-
 const jwt = require("jsonwebtoken");
 
 const jwtSecret = process.env.JWT_SECRET;
 
 const authGuard = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  // Check if header has a token
+  const token = authHeader && authHeader.split(" ")[1]; // Extrai o token do cabeçalho
+  
+  // Verifica se o cabeçalho possui o token
   if (!token) return res.status(401).json({ errors: ["Acesso negado!"] });
 
-  console.log("token recebido", token);
-  console.log("horário do servidor:", new Date())
+  console.log("Hora UTC atual:", new Date().toISOString());
+  console.log("Token recebido:", token);
 
-  // Check if token is valid
   try {
+    // Verifica e decodifica o token
     const verified = jwt.verify(token, jwtSecret);
 
-    req.user = await User.findByPk(verified.id).select("-password");
-   
-    console.log("token valido:", verified);
-   
-    next();
-  } catch (errors) {
-    console.log(errors)
+     // Debugging: visualizando a data de expiração do token
+     console.log("Token válido! Expiração:", new Date(verified.exp * 1000).toISOString());
 
-    if(err.name === "TokenExpiredError"){
-      console.log("token expirado");
+    console.log("Token válido:", verified);
 
-      return res.status(401).json({message:"token expirado, faça login novamente."})
+    // Busca o usuário no banco de dados
+    req.user = await User.findById(verified.id).select("-password");
+    if (!req.user) {
+      return res.status(404).json({ errors: ["Usuário não encontrado."] });
     }
 
-    res.status(400).json({ errors: ["O Token é inválido!"] });
+    next(); // Continua para a próxima função
+  } catch (error) {
+    console.log("Erro no token:", error);
+
+    if (error.name === "TokenExpiredError") {
+      console.log("Token expirado");
+      return res.status(401).json({ errors: ["Token expirado, faça login novamente."] });
+    }
+
+    return res.status(400).json({ errors: ["O token é inválido ou ocorreu um problema interno."] });
   }
 };
 

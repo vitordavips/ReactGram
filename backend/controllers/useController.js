@@ -8,11 +8,18 @@ const jwtSecret = process.env.JWT_SECRET;
 
 // Generate user token
 const generateToken = (id) => {
+  const now = new Date(); // hora atual UTC do servidor
+  console.log('hora atual', now.toISOString());
+  return jwt.sign({ id }, jwtSecret, {expiresIn:'7d'})
+}
+
+/*const generateToken = (id) => {
   return jwt.sign({ id }, jwtSecret, {
-    expiresIn: "1d",
+    expiresIn: '7d',
   });
 };
- 
+*/
+
 // Função para registrar um novo usuário e fazer login automático
 const register = async (req, res) => {
   const { name, email, password } = req.body; // Extrai os dados do corpo da requisição
@@ -50,6 +57,8 @@ const register = async (req, res) => {
     token: generateToken(newUser._id)
   })
 };
+
+
 
 // Função para obter o usuário atualmente logado
 const getCurrentUser = async (req, res) => {
