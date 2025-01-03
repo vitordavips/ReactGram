@@ -7,18 +7,22 @@ const { default: mongoose } = require("mongoose");
 const jwtSecret = process.env.JWT_SECRET;
 
 // Generate user token
+// const generateToken = (id) => {
+//   const now = new Date(); // hora atual UTC do servidor
+//   console.log('hora atual', now.toISOString());
+//   return jwt.sign({ id }, jwtSecret, {expiresIn:'7d'})
+// }
+
 const generateToken = (id) => {
   const now = new Date(); // hora atual UTC do servidor
   console.log('hora atual', now.toISOString());
-  return jwt.sign({ id }, jwtSecret, {expiresIn:'7d'})
-}
-
-/*const generateToken = (id) => {
-  return jwt.sign({ id }, jwtSecret, {
+  return token = jwt.sign({ id }, jwtSecret, {
     expiresIn: '7d',
   });
+  console.log("Token login",token);
 };
-*/
+
+
 
 // Função para registrar um novo usuário e fazer login automático
 const register = async (req, res) => {
@@ -91,6 +95,8 @@ const login = async (req, res) => {
     token: generateToken(user._id),
   });
 };
+
+
 
 // Função para atualizar o perfil do usuário autenticado
 const update = async (req, res) => {
