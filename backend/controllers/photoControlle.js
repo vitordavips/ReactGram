@@ -91,6 +91,52 @@ const getUserPhotos = async(req, res) => {
     return res.status(200).json(photos);
 };
 
+// get photo by id
+const getPhotoById = async (req, res) => {
+    
+    const {id} = req.params;
+
+    const photo = await Photo.findById(new mongoose.Types.ObjectId(id));
+
+    // check if photo exists
+    if(!photo){
+        res.status(404).json({errors:["Foto não encontrada."]});
+        return;
+    }
+
+    res.status(200).json(photo);
+};
+
+// update a photo
+const updatePhoto = async(req, res) => {
+    const {id} = req.params
+
+    const{title} = req.body
+
+    const reqUser = req.user
+
+    const photo = await Photo.findById(id)
+
+    // check if photo exists
+    if(!photo){
+        res.status(404).json({errors: ["Foto não encontrada."]})
+        return
+    }
+
+    // check if photo pertence ao usuario
+    if(!photo.userID.equals(reqUser._id)){
+        res.status(422).json({errors:["Ocorreu um erro, por favor tente novamente mais tarde."]})
+        return;
+    }
+
+    if(title){
+        photo.title = title
+    }
+
+    await photo.save()
+
+    res.status(200).json({photo, message: "Foto atualizada com sucesso!s"});
+}
 
 
 // Exporta a função 'insertPhoto' para que possa ser utilizada em outras partes do projeto
@@ -99,4 +145,6 @@ module.exports = {
     deletePhoto,
     getAllPhotos,
     getUserPhotos,
+    getPhotoById,
+    updatePhoto,
 };
