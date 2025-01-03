@@ -12,7 +12,7 @@ const insertPhoto = async (req, res) => {
 
     const image = req.file.filename;
 
-    console.log(req.body);
+    //console.log(req.body);
 
     const reqUser = req.user;
 
@@ -20,6 +20,7 @@ const insertPhoto = async (req, res) => {
 
     console.log(user.name);
 
+    // create a photo
     const newPhoto = await Photo.create({
         image,
         title,

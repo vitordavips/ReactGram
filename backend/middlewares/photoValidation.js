@@ -7,7 +7,7 @@ const photoInsertValidation = () => {
             .equals("undefined")
             .withMessage("O título é obrigatório.")
             .isString()
-            .withMessage("O título é obrigatório.")
+            .withMessage("O título precisa ter no mínimo 3 caracteres.")
             .isLength({min: 3})
             .withMessage("O título é obrigatório."),
         body("image").custom((value, {req}) => {
