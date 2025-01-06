@@ -124,7 +124,7 @@ const updatePhoto = async(req, res) => {
     }
 
     // check if photo pertence ao usuario
-    if(!photo.userID.equals(reqUser._id)){
+    if(!photo.userId.equals(reqUser._id)){
         res.status(422).json({errors:["Ocorreu um erro, por favor tente novamente mais tarde."]})
         return;
     }
@@ -138,6 +138,34 @@ const updatePhoto = async(req, res) => {
     res.status(200).json({photo, message: "Foto atualizada com sucesso!s"});
 }
 
+//Like funccionallity
+const likePhoto = async (req, res) => {
+    const {id} = req.params;
+
+    const reqUser = req.user;
+
+    const photo = await Photo.findById(id);
+
+    // check if photo exists
+    if(!photo){
+        res.status(404).json({errors:["Foto não encontrada"]});
+        return;
+    }
+
+    //check if user already liked the photo
+    if(photo.likes.includes(reqUser._id)){
+        res.status(422).json({errors:["você já curtiu a foto"]});
+        return;
+    }
+
+    // put user id in
+    photo.likes.push(reqUser._id);
+
+    photo.save();
+
+res.status(200).json({photoId: id, userId: reqUser._id, message: "A foto foi curtida."});
+};
+ 
 
 // Exporta a função 'insertPhoto' para que possa ser utilizada em outras partes do projeto
 module.exports = {
@@ -147,4 +175,5 @@ module.exports = {
     getUserPhotos,
     getPhotoById,
     updatePhoto,
+    likePhoto,
 };
