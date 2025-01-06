@@ -187,8 +187,6 @@ const commentPhoto = async(req, res) =>{
             return;
         };
 
-        
-
         //put comment in the array comments
         const userComment = {
             comment,
@@ -212,6 +210,21 @@ const commentPhoto = async(req, res) =>{
 
 };
 
+// search photos by title
+const searchPhotos = async (req, res) => {
+    const { q } = req.query;
+
+    try {
+        const photos = await Photo.find({ title: new RegExp(q, "i") }).exec();
+        
+        res.status(200).json(photos);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({error: ["título não encontrado."]})
+    }
+ 
+};
+
 // Exporta a função 'insertPhoto' para que possa ser utilizada em outras partes do projeto
 module.exports = {
     insertPhoto,
@@ -222,4 +235,5 @@ module.exports = {
     updatePhoto,
     likePhoto,
     commentPhoto,
+    searchPhotos,
 };
