@@ -19,11 +19,9 @@ const Navbar = () => {
                     <BsHouseDoorFill/>
                 </NavLink>
             </li>
-
             <li>
                 <NavLink to="/login">Entrar</NavLink>
             </li>
-            
             <li>
                 <NavLink to="/register">Cadastrar</NavLink>
             </li>
