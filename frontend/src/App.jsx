@@ -1,12 +1,17 @@
-import { useState } from 'react'
+//import { useState } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+// Router
+import {BrowserRouter, Routes, Router, Navigate} from 'react-router-dom'
 
+function App() {
   return (
     <>
-      <h1>ReactGram</h1>
+      <BrowserRouter>
+          <Routes>
+              <Router path="/" element={}/>
+          </Routes>
+      </BrowserRouter>
     </>
   )
 }
