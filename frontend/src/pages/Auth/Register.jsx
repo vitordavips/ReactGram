@@ -13,7 +13,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div id="register">
       <h2>ReactGram</h2>
       <p>Cadastre-se para ver as fotos dos seus amigos.</p>
       <form onSubmit={handleSumit}>
@@ -21,6 +21,7 @@ const Register = () => {
         <input type="email" placeholder="E-mail"/>
         <input type="password" placeholder="Senha"/>
         <input type="password" placeholder="Conofirme a sua senha"/>
+        <input type="sumit" value="Cadastrar"/>
         <button>Cadastrar</button>
       </form>
       <p>
