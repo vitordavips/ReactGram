@@ -16,12 +16,13 @@ const Register = () => {
     <div>
       <h2>ReactGram</h2>
       <p>Cadastre-se para ver as fotos dos seus amigos.</p>
-      <from onSumit={handleSumit}>
+      <form onSubmit={handleSumit}>
         <input type="text" placeholder="None" />
         <input type="email" placeholder="E-mail"/>
         <input type="password" placeholder="Senha"/>
         <input type="password" placeholder="Conofirme a sua senha"/>
-      </from>
+        <button>Cadastrar</button>
+      </form>
       <p>
         Já tem conta? <Link to="/login">Clique aqui.</Link>
       </p>
