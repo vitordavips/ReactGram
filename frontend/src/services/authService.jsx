@@ -1,5 +1,5 @@
 // Importa as URLs e a função de configuração da requisição
-import { api, requestConfig } from '../utils/config.js';
+import { api, requestConfig } from '../utils/config.jsx';
 
 // Função para registrar um novo usuário.
 const register = async (data) => {

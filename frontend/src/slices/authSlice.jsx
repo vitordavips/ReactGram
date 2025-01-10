@@ -1,9 +1,8 @@
-// Importa as funções `createSlice` e `createAsyncThunk` do Redux Toolkit.
 // Essas funções são utilizadas para simplificar a criação de reducers e gerenciamento de ações assíncronas.
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Importa o serviço de autenticação que contém funções relacionadas ao registro e login de usuários.
-import authService from "../services/authService";
+import authService from "../services/authService.jsx";
 
 // Recupera o usuário armazenado no `localStorage` (se houver) e o converte de JSON para objeto JavaScript.
 const user = JSON.parse(localStorage.getItem("user"));
@@ -11,15 +10,13 @@ const user = JSON.parse(localStorage.getItem("user"));
 // Define o estado inicial da slice de autenticação.
 // Contém informações sobre o usuário, além de indicadores de erro, sucesso e carregamento.
 const initialState = {
-    user: user ? user : null,  // Define o usuário como o valor do localStorage ou `null` caso não exista.
-    error: false,             // Indica se ocorreu um erro.
-    success: false,           // Indica se a operação foi bem-sucedida.
-    loading: false,           // Indica se a operação está em andamento.
+    user: user ? user : null,  
+    error: false,             
+    success: false,           
+    loading: false,           
 };
 
 // Cria uma ação assíncrona para registrar o usuário.
-// - "auth/register": É o tipo da ação, usado para identificar no Redux.
-// - `async(user, thunkAPI)`: A função recebe os dados do usuário e o objeto `thunkAPI` para lidar com erros e dispatch de ações.
 export const register = createAsyncThunk(
     "auth/register",
     async (user, thunkAPI) => {
