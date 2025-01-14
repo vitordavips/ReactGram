@@ -1,6 +1,9 @@
 //import { useState } from 'react'
 import './App.css'
 
+// hooks
+import { useAuth } from './hooks/useAuth.jsx';
+
 // Router
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 
@@ -14,18 +17,25 @@ import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 
 function App() {
+  const {auth, loading} = useAuth();
+
+
+  if(loading){
+    return <p>Carregando...</p>
+  }
+
   return (
     <>
       <BrowserRouter>
-          <Navbar />
-            <div className='container'>
-              <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/register" element={<Register/>}/>
-              </Routes>
-            </div>
-          <Footer />
+        <Navbar />
+        <div className='container'>
+          <Routes>
+            <Route path="/" element={auth ? <Home/> : <Navigate to="/login"/>} />
+            <Route path="/login" element={!auth ? <Login/> : <Navigate to="/" />} />
+            <Route path="/register" element={!auth ? <Register/> : <Navigate to="/" />}/>
+          </Routes>
+        </div>
+        <Footer />
       </BrowserRouter>
     </>
   )
