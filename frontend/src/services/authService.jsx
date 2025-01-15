@@ -1,5 +1,4 @@
 // Importa as URLs e a função de configuração da requisição
-import { logout } from '../slices/authSlice.jsx';
 import { api, requestConfig } from '../utils/config.jsx';
 
 // Register a user
