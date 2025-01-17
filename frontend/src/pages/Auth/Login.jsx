@@ -27,17 +27,23 @@ const Login = () => {
       password
     }
 
-    dispatch
+    dispatch(login(user))
   };
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   return (
     <div id="login">
       <h2>ReactGram</h2>
       <p className="subtitle">Faça o login para ver o que há de novo.</p>
       <form onSubmit={handleSumit}>
-        <input type="text" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)} value={password || ""}/>
-        <input type="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} value={password || ""}/>
-        <input type="submit" value="Entrar" />
+        <input type="text" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)} value={email || ""}/>
+        <input type="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} value={password || ""}/>    
+        {!loading && <input type="submit" value="Cadastrar" />}
+        {loading && <input type="submit" disabled value="Aguarde..." />}
+        {error && <Message msg={error} type="error" />}
       </form>
       <p>
         Não tem uma conta? <Link to="/register">Clique aqui</Link>
