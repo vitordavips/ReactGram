@@ -45,50 +45,66 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   return data;
 });
 
-
+// Importa a função createslice do Redux Toolkit para criar o slice
 export const authSlice = createSlice({
+  // define o nome do slice
   name: "auth",
+
+  // define o estado inicial do slice
   initialState,
+
+  // define os reducers sincronizados (ações que atualizam diretamente o estado)
   reducers: {
+    // redefine os valores do estado para os padrões
     reset: (state) => {
       state.loading = false;
       state.error = false;
       state.success = false;
     },
   },
+
+  // define os extraReducers (ações assíncronas processadas pelo slice)
   extraReducers: (builder) => {
+    // lida com o estado quando a ação register está pendente
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
+      
+      // Lida com o estado quando a ação register é concluída com sucesso
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.user = action.payload;
       })
+      //Lida com o estado quando a ação register falha
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.user = null;
       })
+      // Lida com o estado quando a ação logout é concluída com sucesso
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.loading = false;
         state.success = true;
         state.error = null;
       })
+      // Lida com o estado quando a ação login está pendente
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
+      // Lida com o estado quando a ação login é concluída com sucesso
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.user = action.payload;
       })
+      // Lida com o estado quando a ação login falha
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
