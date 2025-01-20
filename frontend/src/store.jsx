@@ -3,7 +3,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import authReducer from './slices/authSlice.jsx';
-
+import  useReducer  from "./slices/userSlice.jsx";
 
 // Configura a store do Redux.
 // A store é o local onde o estado global da aplicação será armazenado.
@@ -11,5 +11,6 @@ export const store = configureStore({
     // Aqui você define os "reducers" (redutores), que são funções responsáveis por atualizar o estado.
     reducer: {
         auth: authReducer,
+        user: useReducer,
     },
 });
