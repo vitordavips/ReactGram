@@ -22,7 +22,7 @@ const EditProfile = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [bio, setBio] = useState("");
-    const [preview, setPreviewImage] = useState("");
+    const [previewImage, setPreviewImage] = useState("");
 
     // Load user data
     useEffect(() => {
@@ -40,18 +40,37 @@ const EditProfile = () => {
 
     const handleSumit = (e) => {
         e.preventDefault()
+    };
+
+    const handleFile = (e) => {
+        // image preview
+        const image = e.target.files[0];
+
+        setPreviewImage(image);
+
+        // update image state
+        setImageProfile(image);
     }
   return (
     <div>
         <h2>Edite seus dados</h2>
         <p>Adicione uma imagem de perfil e conte mais sobre você...</p>
-        {/* preview da imagem */}
+        {(user.profileImage || previewImage) && (
+            <img 
+                className='profile-image'
+                src={
+                    previewImage ? URL.createObjectURL(previewImage) : `${uploads}/users/${user.profileImage}`
+                }
+                alt={user.name}
+
+            />
+        )}
         <form onSubmit={handleSumit}>
             <input type="text" placeholder='Nome' onChange={(e) => setName(e.target.value)} value={name || ""}/>
             <input type="email" placeholder='E-mail' disabled value={name || ""}/>
             <label>
                 <span>Imagem do Perfil</span>
-                <input type="file" />
+                <input type="file" onChange={handleFile}/>
             </label>
             <label>
                 <span>Bio:</span>
@@ -59,7 +78,7 @@ const EditProfile = () => {
             </label>
             <label>
                 <span>Quer alterar sua senha?</span>
-                <input type="password" value="Digite a sua senha" onChange={(e) => setPassword(e.target.value)}  />
+                <input type="password" placeholder="Digite a sua senha" onChange={(e) => setPassword(e.target.value)}  value={password || ""}/>
             </label>
             <input type="submit" value="Atualizar"/>
         </form>
