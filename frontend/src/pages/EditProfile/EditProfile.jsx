@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 // Redux
-import {profile, resetMessage} from "../../slices/userSlice.jsx";
+import {profile, resetMessage, updateProfile} from "../../slices/userSlice.jsx";
 
 // Components
 import Message from "../../components/Message.jsx";
@@ -21,6 +21,7 @@ const EditProfile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [profileImage, setImageProfile] = useState("");
     const [bio, setBio] = useState("");
     const [previewImage, setPreviewImage] = useState("");
 
@@ -38,8 +39,40 @@ const EditProfile = () => {
         }
     },[user])
 
-    const handleSumit = (e) => {
+    const handleSumit = async (e) => {
         e.preventDefault()
+
+        //Coleta de dados de usuários de estados
+        const userData = {
+            name
+        }
+
+        if (profileImage) {
+            userData.profileImage = profileImage;
+        }
+
+        if(bio) {
+            userData.bio = bio;
+        };
+
+        if(password){
+            userData.password = password;
+        };
+
+        
+        // Construir o FormData
+            const formData = new FormData();
+
+            Object.keys(userData).forEach((key) => formData.append(key, userData[key]));
+
+
+            // Chamar o dispatch
+            await dispatch(updateProfile(formData));
+
+            // Resetar mensagens após 200ms
+            setTimeout(() => {
+                dispatch(resetMessage());
+            }, 200);
     };
 
     const handleFile = (e) => {
@@ -67,7 +100,7 @@ const EditProfile = () => {
         )}
         <form onSubmit={handleSumit}>
             <input type="text" placeholder='Nome' onChange={(e) => setName(e.target.value)} value={name || ""}/>
-            <input type="email" placeholder='E-mail' disabled value={name || ""}/>
+            <input type="email" placeholder='E-mail' disabled value={email || ""}/>
             <label>
                 <span>Imagem do Perfil</span>
                 <input type="file" onChange={handleFile}/>
@@ -80,7 +113,10 @@ const EditProfile = () => {
                 <span>Quer alterar sua senha?</span>
                 <input type="password" placeholder="Digite a sua senha" onChange={(e) => setPassword(e.target.value)}  value={password || ""}/>
             </label>
-            <input type="submit" value="Atualizar"/>
+            {!loading && <input type="submit" value="Atualizar" />}
+            {loading && <input type="submit" disabled value="Aguarde..." />}
+            {error && <Message msg={error} type="error" />}
+            {message && <Message msg={message} type="success" />}
         </form>
     </div>
   )

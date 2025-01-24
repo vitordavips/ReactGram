@@ -52,9 +52,10 @@ export const profile = createAsyncThunk(
                         })
                         //Lida com o estado quando a ação register falha
                         .addCase(updateProfile.rejected, (state, action) => {
-                          state.loading = false;
-                          state.error = action.payload;
-                          state.user = null;
+                            console.log(state, action);
+                            state.loading = false;
+                            state.error = action.payload;
+                            state.user = {};
                         });
         },
     },
