@@ -63,11 +63,16 @@ const EditProfile = () => {
         // Construir o FormData
             const formData = new FormData();
 
-            Object.keys(userData).forEach((key) => formData.append(key, userData[key]));
+            const userFormData = Object.keys(userData).forEach((key) => 
+                formData.append(key, userData[key])
+            );
 
+            //Object.keys(userData).forEach((key) => formData.append(key, userData[key]));
+
+            formData.append("user", userFormData)
 
             // Chamar o dispatch
-            await dispatch(updateProfile(formData));
+            await dispatch(updateProfile(userFormData));
 
             // Resetar mensagens após 200ms
             setTimeout(() => {

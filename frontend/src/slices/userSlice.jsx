@@ -14,7 +14,7 @@ export const profile = createAsyncThunk(
     "user/profile", // Identificador da ação
     async(user, thunkAPI) => {
         // obtém o token do usuário a partir do estado de autentificação
-        const token = thunkAPI.getState().auth.user.token;
+        const token = thunkAPI.getState.auth.user.token;
 
         // chama o serviço para buscar os dados do perfil do usuário
         const data = await userService.profile(user, token);
@@ -58,8 +58,7 @@ export const profile = createAsyncThunk(
                             state.user = {};
                         });
         },
-    },
-);
+});
 
 // Update user details
 export const updateProfile = createAsyncThunk(
