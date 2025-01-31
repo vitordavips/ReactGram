@@ -36,27 +36,6 @@ export const profile = createAsyncThunk(
                     state.error = null;
                     state.user = action.payload;
                   })
-
-                  .addCase(updateProfile.pending, (state) => {
-                          state.loading = true;
-                          state.error = null;
-                        })
-                        
-                        // Lida com o estado quando a ação register é concluída com sucesso
-                        .addCase(updateProfile.fulfilled, (state, action) => {
-                          state.loading = false;
-                          state.success = true;
-                          state.error = null;
-                          state.user = action.payload;
-                          state.message = "Usuário atualizado com sucesso!"
-                        })
-                        //Lida com o estado quando a ação register falha
-                        .addCase(updateProfile.rejected, (state, action) => {
-                            console.log(state, action);
-                            state.loading = false;
-                            state.error = action.payload;
-                            state.user = {};
-                        });
         },
 });
 
@@ -75,7 +54,7 @@ export const updateProfile = createAsyncThunk(
 
         return data;
     }    
-)
+);
 export const userSlice = createSlice({
     name: "user",
     initialState,
@@ -83,6 +62,40 @@ export const userSlice = createSlice({
         resetMessage:(state) => {
             state.message = null;
         },
+    },
+    extraReducers: (builder) =>{
+        builder
+            .addCase(profile.pending, (state) => {
+                 state.loading = true;
+                 state.error = false;
+            })
+            .addCase(profile.fulfilled, (state, action) =>{
+                state.loading = false;
+                state.success = true;
+                state.error = null;
+                state.user = action.payload;
+            })
+            
+            .addCase(updateProfile.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+              
+              // Lida com o estado quando a ação register é concluída com sucesso
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.error = null;
+                state.user = action.payload;
+                state.message = "Usuário atualizado com sucesso!"
+            })
+              //Lida com o estado quando a ação register falha
+            .addCase(updateProfile.rejected, (state, action) => {
+                console.log(state, action);
+                state.loading = false;
+                state.error = action.payload;
+                state.user = {};
+            });
     },
 });
 
