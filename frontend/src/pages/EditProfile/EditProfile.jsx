@@ -77,7 +77,7 @@ const EditProfile = () => {
             // Resetar mensagens após 200ms
             setTimeout(() => {
                 dispatch(resetMessage());
-            }, 200);
+            }, 2000);
     };
 
     const handleFile = (e) => {
@@ -92,7 +92,7 @@ const EditProfile = () => {
   return (
     <div>
         <h2>Edite seus dados</h2>
-        <p>Adicione uma imagem de perfil e conte mais sobre você...</p>
+        <p className='subtitle'>Adicione uma imagem de perfil e conte mais sobre você...</p>
         {(user.profileImage || previewImage) && (
             <img 
                 className='profile-image'
@@ -105,7 +105,7 @@ const EditProfile = () => {
         )}
         <form onSubmit={handleSumit}>
             <input type="text" placeholder='Nome' onChange={(e) => setName(e.target.value)} value={name || ""}/>
-            <input type="email" placeholder='E-mail' disabled value={email || ""}/>
+            <input type="email" placeholder='E-mail'  disabled value={email || ""}/>
             <label>
                 <span>Imagem do Perfil</span>
                 <input type="file" onChange={handleFile}/>
@@ -118,8 +118,8 @@ const EditProfile = () => {
                 <span>Quer alterar sua senha?</span>
                 <input type="password" placeholder="Digite a sua senha" onChange={(e) => setPassword(e.target.value)}  value={password || ""}/>
             </label>
-            {!loading && <input type="submit" value="Atualizar" />}
-            {loading && <input type="submit" disabled value="Aguarde..." />}
+            {loading && <input type='submit' value="Atualizar" />}
+            {!loading && <input type='submit' disabled value="Aguarde..."/>}
             {error && <Message msg={error} type="error" />}
             {message && <Message msg={message} type="success" />}
         </form>
