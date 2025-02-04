@@ -29,10 +29,25 @@
       console.log(error);
     }
   };
+
+  // Get user details
+  const getUSerDetails = async (id) => {
+    const config = requestConfig("GET")
+
+    try {
+      const res = await fetch(api + "/users"/ + id, config)
+                .then((err) => res.json())
+                .catch((err) => err)
+      return res;
+    } catch (error) {
+      console.log(error)
+    }
+  };
   
   const userService = {
     profile,
     updateProfile,
-  }
+    getUSerDetails,
+  };
 
   export default userService;
