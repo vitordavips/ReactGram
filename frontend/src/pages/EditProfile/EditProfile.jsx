@@ -118,8 +118,8 @@ const EditProfile = () => {
                 <span>Quer alterar sua senha?</span>
                 <input type="password" placeholder="Digite a sua senha" onChange={(e) => setPassword(e.target.value)}  value={password || ""}/>
             </label>
-            {loading && <input type='submit' value="Atualizar" />}
-            {!loading && <input type='submit' disabled value="Aguarde..."/>}
+            {!loading && <input type='submit' value="Atualizar" />}
+            {loading && <input type='submit' disabled value="Aguarde..."/>}
             {error && <Message msg={error} type="error" />}
             {message && <Message msg={message} type="success" />}
         </form>
