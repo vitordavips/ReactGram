@@ -30,14 +30,14 @@ const EditProfile = () => {
         dispatch(profile());
     }, [dispatch]);
 
-    // Fill form with user data
+    // Preenchendo o formulário com os dados do usuário
     useEffect(() => {
         if(user){
-            setName(user.name)
-            setEmail(user.email)
-            setBio(user.bio)
+            setName(user.name);
+            setEmail(user.email);
+            setBio(user.bio);
         }
-    },[user])
+    }, [user]);
 
     const handleSumit = async (e) => {
         e.preventDefault()
@@ -80,15 +80,14 @@ const EditProfile = () => {
             }, 2000);
     };
 
-    const handleFile = (e) => {
-        // image preview
+    const handleFile = () => {
         const image = e.target.files[0];
 
         setPreviewImage(image);
 
-        // update image state
         setImageProfile(image);
-    }
+    };
+    
   return (
     <div>
         <h2>Edite seus dados</h2>
