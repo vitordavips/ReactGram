@@ -21,7 +21,7 @@ const EditProfile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [profileImage, setImageProfile] = useState("");
+    const [profileImage, setProfileImage] = useState("");
     const [bio, setBio] = useState("");
     const [previewImage, setPreviewImage] = useState("");
 
@@ -80,13 +80,15 @@ const EditProfile = () => {
             }, 2000);
     };
 
-    const handleFile = () => {
+    const handleFile = (e) => {
+        //image preview
         const image = e.target.files[0];
 
         setPreviewImage(image);
 
-        setImageProfile(image);
-    };
+        // alterar o state da imagem
+        setProfileImage(image);
+    }
     
   return (
     <div>

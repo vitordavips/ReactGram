@@ -28,9 +28,9 @@ const Profile = () => {
     const editPhotoForm = useRef()
     // Load user data
     useEffect(() => {
-        dispatch(getUserDetails(id))
-    }, [dispatch, id]);
-
+        dispatch(getUserDetails(id));
+        
+    }, [dispatch, id])
     const submiHandle = (e) => {
         e.preventDefault();
     };
