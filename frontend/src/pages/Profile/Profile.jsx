@@ -26,11 +26,13 @@ const Profile = () => {
     //new form and edit form refs
     const newPhotoForm = useRef()
     const editPhotoForm = useRef()
+
     // Load user data
     useEffect(() => {
         dispatch(getUserDetails(id));
         
-    }, [dispatch, id])
+    }, [dispatch, id]);
+    
     const submiHandle = (e) => {
         e.preventDefault();
     };
