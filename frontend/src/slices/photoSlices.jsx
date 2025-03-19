@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import photoService from "../services/photoService";
-import { resetMessage } from "./userSlice";
 
 const initialState = {
     photos: [],
@@ -14,7 +13,7 @@ const initialState = {
 // funcoes
 
 export const photoSlice = createSlice({
-    name: 'photo',
+    name: "photo",
     initialState,
     reducers: {
         resetMessage: (state) => {
@@ -22,7 +21,6 @@ export const photoSlice = createSlice({
         },
     },
 });
-
 
 export const { resetMessage } = photoSlice.actions;
 export default photoSlice.reducer;
