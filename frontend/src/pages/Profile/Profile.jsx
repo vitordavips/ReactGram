@@ -96,6 +96,8 @@ const Profile = () => {
                             {loadingPhoto && <input type="submit" value="Aguarde..."/>}
                         </form>
                     </div>
+                    {errorPhoto && <Message msg={errorPhoto} type='error'/>}
+                    {errorPhoto && <Message msg={messagePhoto} type='success'/>}
                 </>
             )}
         </div>;
