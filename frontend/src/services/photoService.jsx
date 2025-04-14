@@ -1,16 +1,19 @@
 import { api, requestConfig } from '../utils/config';
 
 //Publish an user photo
-const publishPhoto = async(data, token) => {
-    const config = requestConfig("POST", data, token, true)
+const publishPhoto = async (data, token) => {
+    const config = requestConfig("POST", data, token, true);
 
-    try {
-        const res = await fetch(api + "/photo", config).then((res) => res.json()).catch((err) => err);
+    try{
+        const res = await fetch(api + "/photos", config)
+                    .then((res) => res.json())
+                    .catch((err) => err);
 
         return res;
-    } catch (error) {
+    }
+    catch(error) {
         console.log(error);
-    };
+    }
 };
 
 // get user photos
@@ -20,7 +23,7 @@ const getUserPhotos = async(id, token) => {
     try {
         const res = await fetch(api + "/photos/user/" + id, config)
                     .then((res) => res.json())
-                    .catc((err) => err)
+                    .catch((err) => err)
         return res;
     } catch (error) {
         console.log(error)

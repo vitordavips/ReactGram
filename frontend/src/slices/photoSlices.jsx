@@ -30,14 +30,17 @@ export const publishPhoto = createAsyncThunk(
 // Get user photos
 export const getUserPhotos = createAsyncThunk(
     "photos/userphotos",
-    async(id, thunkAPI) => {
+    async(IdleDeadline, thunkAPI) => {
         const token = thunkAPI.getState().auth.user.token;
 
-        const data = await photoService.getUserPhotos(id, token);
+        const data = await photoService.getUserPhotos(IdleDeadline, token);
+
+        console.log(data);
+        console.log(data.errors);
 
         return data;
     }
-)
+);
 
 export const photoSlice = createSlice({
     name: "photo",

@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 // Redux
 import {getUserDetails} from "../../slices/userSlice";
 import { uploads } from "../../utils/config";
-import { publishPhoto, resetMessage } from "../../slices/photoSlices";
+import { publishPhoto, resetMessage, getUserPhotos } from "../../slices/photoSlices";
 
 const Profile = () => {
 
@@ -26,6 +26,7 @@ const Profile = () => {
     const {photos, loading: loadingPhoto, message: messagePhoto, error: errorPhoto} = useSelector((state) => state.photo);
 
     const [title, setTitle] = useState();
+    const [image, setImage] = useState();
 
     //new form and edit form refs
     const newPhotoForm = useRef()
@@ -34,14 +35,15 @@ const Profile = () => {
     // Load user data
     useEffect(() => {
         dispatch(getUserDetails(id));
-        
+        dispatch(getUserPhotos(id));
     }, [dispatch, id]);
 
-    const handleFile = (e) => {
-        const image = e.target.files[0];
+   //change image state
+   const handleFile = (e) => {
+    const image = e.target.files[0];
 
-        setImage(image);
-    };
+    setImage(image);
+   };
     
     const submiHandle = (e) => {
         e.preventDefault();
@@ -54,9 +56,9 @@ const Profile = () => {
         //build from
         const formData = new FormData();
 
-        const photoFormData = Object.keys(photoData).forEach((key) => formData.append(key, photoData[key]));
-
-        formData.append("photo", photoFormData)
+        Object.keys(photoData).forEach((key) => {
+            formData.append(key, photoData[key]);
+        });
 
         dispatch(publishPhoto(formData))
 
@@ -88,20 +90,36 @@ const Profile = () => {
                         <form onSubmit={submiHandle}>
                             <label>
                                 <span>Título para a foto:</span>
-                                <input type="text" placeholder="Insira um título" onChange={(e) => setTimeout(e.target.value)} value={title || " "}/>
+                                <input type="text" placeholder="Insira um título" onChange={(e) => setTitle(e.target.value)} value={title || ""}/>
                             </label>
                             <label>
                                 <span>Imagem:</span>
                                 <input type="file" onChange={handleFile}/>
                             </label>
                             {!loadingPhoto && <input type="submit" value="Postar"/>}
-                            {loadingPhoto && <input type="submit" value="Aguarde..."/>}
+                            {loadingPhoto && <input type="submit" disabled value="Aguarde..."/>}
                         </form>
                     </div>
                     {errorPhoto && <Message msg={errorPhoto} type='error'/>}
-                    {errorPhoto && <Message msg={messagePhoto} type='success'/>}
+                    {messagePhoto && <Message msg={messagePhoto} type='success'/>}
                 </>
             )}
+            <div className="user-photos">
+                <h2>Fotos publicados:</h2>
+                <div className="photos-container">
+                    {photos && photos.map((photo) => (
+                        <div className="photo" key={photo._id}>
+                            {photo.image && (<img src={`${uploads}/photos/${photo.image}`} alt={photo.title}/>)}
+                        </div>
+                    ))}
+                    {id === userAuth._id ? (
+                        <p>actions</p>
+                    ) : (
+                        <Link className="btn" to={`/photo/${photo._id}`}>Ver</Link>
+                    )}
+                    {photos.length === 0 && <p>Ainda não há fotos publicadas</p>}
+                </div>
+            </div>
         </div>;
 };
 
