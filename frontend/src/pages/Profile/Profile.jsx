@@ -25,6 +25,8 @@ const Profile = () => {
     const {user: userAuth} = useSelector((state) => state.auth)
     const {photos, loading: loadingPhoto, message: messagePhoto, error: errorPhoto} = useSelector((state) => state.photo);
 
+    const [title, setTitle] = useState();
+
     //new form and edit form refs
     const newPhotoForm = useRef()
     const editPhotoForm = useRef()
