@@ -25,8 +25,8 @@ const Profile = () => {
     const {user: userAuth} = useSelector((state) => state.auth)
     const {photos, loading: loadingPhoto, message: messagePhoto, error: errorPhoto} = useSelector((state) => state.photo);
 
-    const [title, setTitle] = useState();
-    const [image, setImage] = useState();
+    const [title, setTitle] = useState("");
+    const [image, setImage] = useState("");
 
     //new form and edit form refs
     const newPhotoForm = useRef()
@@ -45,7 +45,7 @@ const Profile = () => {
     setImage(image);
    };
     
-    const submiHandle = (e) => {
+    const submitHandle = (e) => {
         e.preventDefault();
 
         const photoData = {
@@ -87,7 +87,7 @@ const Profile = () => {
                 <>
                     <div className="new-photo" ref={newPhotoForm}>
                         <h3>Compartilhe algum momento seu: </h3>
-                        <form onSubmit={submiHandle}>
+                        <form onSubmit={submitHandle}>
                             <label>
                                 <span>Título para a foto:</span>
                                 <input type="text" placeholder="Insira um título" onChange={(e) => setTitle(e.target.value)} value={title || ""}/>
@@ -105,18 +105,25 @@ const Profile = () => {
                 </>
             )}
             <div className="user-photos">
-                <h2>Fotos publicados:</h2>
+                <h2>Fotos publicadas:</h2>
                 <div className="photos-container">
                     {photos && photos.map((photo) => (
                         <div className="photo" key={photo._id}>
-                            {photo.image && (<img src={`${uploads}/photos/${photo.image}`} alt={photo.title}/>)}
+                            {photo.image && (
+                                <img 
+                                src={`${uploads}/photos/${photo.image}`} 
+                                alt={photo.title}
+                                />
+                            )}
+                            {id === userAuth._id ? (
+                                <p>actions</p>
+                            ) : (
+                                <Link className="btn" to={`/photos/${photos._id}`}>
+                                    Ver
+                                </Link>
+                            )}
                         </div>
                     ))}
-                    {id === userAuth._id ? (
-                        <p>actions</p>
-                    ) : (
-                        <Link className="btn" to={`/photo/${photo._id}`}>Ver</Link>
-                    )}
                     {photos.length === 0 && <p>Ainda não há fotos publicadas</p>}
                 </div>
             </div>
