@@ -3,7 +3,7 @@ import "./Profile.css";
 // components
 import Message from "../../components/Message";
 import {Link} from "react-router-dom";
-import { BsFillEyeFill, BsPCircleFill, BsXLg} from "react-icons/bs"; 
+import { BsFillEyeFill, BsPCircleFill, BsPencilFill, BsXLg} from "react-icons/bs"; 
 
 // hooks
 import { useState, useEffect, useRef } from "react";
@@ -116,7 +116,13 @@ const Profile = () => {
                                 />
                             )}
                             {id === userAuth._id ? (
-                                <p>actions</p>
+                                <div className="actions">
+                                    <Link to={`/photos/${photo._id}`}>
+                                        <BsFillEyeFill/>
+                                    </Link>
+                                    <BsPencilFill/>
+                                    <BsXLg/>
+                                </div>
                             ) : (
                                 <Link className="btn" to={`/photos/${photos._id}`}>
                                     Ver
