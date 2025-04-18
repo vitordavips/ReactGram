@@ -104,7 +104,7 @@ const Profile = () => {
     };
 
     // open edit form
-    const handleEdit = () => {
+    const handleEdit = (photo) => {
         if(editPhotoForm.current.classList.contains("hide")){
             hideOrShowForms();
         }
@@ -161,7 +161,7 @@ const Profile = () => {
                                 onChange={(e) => setEditTitle(e.target.value)} 
                                 value={editTitle || ""}
                             />
-                            <input type="sumit" value="Atualizar"/>
+                            <input type="submit" value="Atualizar"/>
                             <button className="cancel-btn" onClick={handleCancelEdit}>Cancelar edição</button>
                         </form>
                     </div>
@@ -185,7 +185,7 @@ const Profile = () => {
                                     <Link to={`/photos/${photo._id}`}>
                                         <BsFillEyeFill/>
                                     </Link>
-                                    <BsPencilFill onClick={() => handleCancelEdit(photo)}/>
+                                    <BsPencilFill onClick={() => handleEdit(photo)}/>
                                     <BsXLg onClick={() => handleDelete(photo._id)}/>
                                 </div>
                             ) : (
