@@ -3,7 +3,7 @@ import "./photo.css";
 import { uploads } from "../../utils/config";
 
 // components
-//import Message from "../../utils/config.jsx";
+import Message from "../../components/Message";
 import {Link} from "react-router-dom";
 import PhotoItem from "../../components/PhotoItem";
 
@@ -22,6 +22,7 @@ const Photo = () => {
   const dispatch = useDispatch();
 
   const {user} = useSelector((state) => state.auth);
+  
   const {photo, loading, error, message} = useSelector(
     (state) => state.photo
   );
