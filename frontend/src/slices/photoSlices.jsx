@@ -93,7 +93,7 @@ export const getPhoto = createAsyncThunk(
 );
 
 // Like a photo
-export const like = createAsyncThunk("photo/like", async(id, thunkAPI) => {
+export const like = createAsyncThunk("photo/like/", async(id, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
 
     const data = await photoService.like(id, token);

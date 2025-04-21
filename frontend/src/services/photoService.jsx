@@ -66,13 +66,18 @@ const getPhoto = async(id, token) => {
     const config = requestConfig("GET", null, token);
 
     try {
-        const res = await fetch(api + "/photos/" + id, config)
-            .then((res) => res.json())
-            .catch((err) => err);
-        
-        return res;
+        const res = await fetch(api + "/photos/" + id, config);
+
+        if(!res.ok){
+            const errorData = await res.json();
+            throw new Error(errorData.message || "Erro ao buscar a foto");
+        }
+
+        const data = await res.json();
+
+        return data;
     } catch (error) {
-        console.log(error)
+        throw error;
     }
 }
 
@@ -81,13 +86,17 @@ const like = async(id, token) => {
     const config = requestConfig("PUT", null, token);
 
     try {
-        const res = await fetch(api + "/photos/like" + id, config)
-            .then((res) => res.json())
-            .catch((err) => err);
-        
-        return res;
+        const res = await fetch(`${api}/photos/like/${id}`, config);
+        const data = await res.json();
+
+        if(!res.ok){
+            throw new Error(data.errors ? data.errors[0] : "Erro ao curitir a foto");
+        }
+
+        return data;
     } catch (error) {
-        console.log(error);
+        console.log("erro no like", error.message);
+        return{errors : [error.message]};
     }
 };
 
