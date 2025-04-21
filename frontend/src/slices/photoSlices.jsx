@@ -29,15 +29,16 @@ export const publishPhoto = createAsyncThunk(
 
 // Get user photos
 export const getUserPhotos = createAsyncThunk(
-    "photos/userphotos",
-    async(IdleDeadline, thunkAPI) => {
-        const token = thunkAPI.getState().auth.user.token;
-
-        const data = await photoService.getUserPhotos(IdleDeadline, token);
-
-        console.log(data.errors);
-
-        return data;
+    "photo/userphotos",
+    async (id, thunkAPI) => {
+      const token = thunkAPI.getState().auth.user.token;
+  
+      const data = await photoService.getUserPhotos(id, token);
+  
+      console.log(data);
+      console.log(data.errors);
+  
+      return data;
     }
 );
 
@@ -75,10 +76,15 @@ export const updatePhoto = createAsyncThunk(
 );
 
 // Get photo by id
-export const getPhoto = createAsyncThunk("photo/getphoto", async (id, thunkAPI) => {
-   const token = thunkAPI.getState().auth.user.token;;
-    const data = await photoService.getPhoto(id, token);  
-   return data;
+export const getPhoto = createAsyncThunk("photo/getphoto", async(id, thunkAPI) => {
+    const token = thunkAPI().auth.user.token;
+
+    try {
+        const data = await photoService.getPhoto(id, token);
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
 });
 
 export const photoSlice = createSlice({
@@ -89,90 +95,154 @@ export const photoSlice = createSlice({
             state.message = null;
         },
     },
-    extraReducers: (builder) =>{
-            builder
-                .addCase(publishPhoto.pending, (state) => {
-                     state.loading = true;
-                     state.error = false;
-                })
-                .addCase(publishPhoto.fulfilled, (state, action) =>{
-                    state.loading = false;
-                    state.success = true;
-                    state.error = null;
-                    state.photo = action.payload;
-                    state.photos.unshift(state.photo);
-                    state.message = "Foto publicada com sucesso!"
-                })
-                .addCase(publishPhoto.rejected, (state, action) =>{
-                    state.loading = false;
-                    state.error = action.payload;
-                    state.photo = {};
-                })
-                .addCase(getUserPhotos.pending, (state) => {
-                    state.loading = true;
-                    state.error = false;
-               })
-               .addCase(getUserPhotos.fulfilled, (state, action) =>{
-                   state.loading = false;
-                   state.success = true;
-                   state.error = null;
-                   state.photo = action.payload;
-               })
-                .addCase(deletePhoto.pending, (state) => {
-                    state.loading = true;
-                    state.error = false;
-                })
-                .addCase(deletePhoto.fulfilled, (state, action) =>{
-                    state.loading = false;
-                    state.success = true;
-                    state.error = null;
-                    state.photos = state.photos.filter((photo) => {
-                        return photo._id != action.payload.id
-                    })
-                    state.message = action.payload.message;
-                })
-                .addCase(deletePhoto.rejected, (state, action) =>{
-                    state.loading = false;
-                    state.error = action.payload;
-                    state.photo = {};
-                })
-                .addCase(updatePhoto.pending, (state) => {
-                    state.loading = true;
-                    state.error = null;
-                })
-                .addCase(updatePhoto.fulfilled, (state, action) => {
-                    state.loading = false;
-                    state.success = true;
-                    state.error = null;
-
-                    state.photos.map((photo) => {
-                        if(photo._id === action.payload.photo._id){
-                            return (photo.title = action.payload.photo.title);
-                        }
-
-                        return photo;
-                    })
-
-                    state.message = action.payload.message;
-                })
-                .addCase(updatePhoto.rejected, (state, action) => {
-                    state.loading = false;
-                    state.error = action.payload;
-                    state.photo = null;
-                })
-                .addCase(getPhoto.pending, (state) => {
-                    state.loading = true;
-                    state.error = false;
-                })
-                .addCase(getPhoto.fulfilled, (state, action) => {
-                    console.log(action.payload);
-                    state.loading = false;
-                    state.success = true;
-                    state.error = null;
-                    state.photo = action.payload;
-                });
+    extraReducers: (builder) => {
+        builder
+        .addCase(publishPhoto.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(publishPhoto.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photo = action.payload;
+            state.photos.unshift(state.photo);
+            state.message = "Foto publicada com sucesso!";
+        })
+        .addCase(publishPhoto.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photo = null;
+        })
+        .addCase(getUserPhotos.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getUserPhotos.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photos = action.payload;
+        })
+        .addCase(getPhoto.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getPhoto.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload || "Erro ao carregar a foto";
+            state.photo = {};
+        })
+        .addCase(getPhoto.fulfilled, (state, action) => {
+            console.log(action.payload);
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photo = action.payload;
+        })
+        .addCase(deletePhoto.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(deletePhoto.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+    
+            state.photos = state.photos.filter((photo) => {
+              return photo._id !== action.payload.id;
+            });
+    
+            state.message = action.payload.message;
+        })
+        .addCase(deletePhoto.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photo = null;
+        })
+        .addCase(updatePhoto.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(updatePhoto.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+    
+            state.photos.map((photo) => {
+              if (photo._id === action.payload.photo._id) {
+                return (photo.title = action.payload.photo.title);
+              }
+              return photo;
+            });
+    
+            state.message = action.payload.message;
+        })
+        .addCase(updatePhoto.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photo = null;
+        })
+        /*.addCase(like.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+    
+            if (state.photo.likes) {
+              state.photo.likes.push(action.payload.userId);
+            }
+    
+            state.photos.map((photo) => {
+              if (photo._id === action.payload.photoId) {
+                return photo.likes.push(action.payload.userId);
+              }
+              return photo;
+            });
+    
+            state.message = action.payload.message;
+        })
+        .addCase(like.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(comment.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+    
+            state.photo.comments.push(action.payload.comment);
+    
+            state.message = action.payload.message;
+        })
+        .addCase(comment.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(getPhotos.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getPhotos.fulfilled, (state, action) => {
+            console.log(action.payload);
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photos = action.payload;
+        })
+        /*.addCase(searchPhotos.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(searchPhotos.fulfilled, (state, action) => {
+            console.log(action.payload);
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.photos = action.payload;
+        });*/
     },
 });
+    
 
 export const { resetMessage } = photoSlice.actions;
 export default photoSlice.reducer;

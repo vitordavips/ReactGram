@@ -62,17 +62,23 @@ const updatePhoto = async(data, id, token) => {
 };
 
 // Get a photo by id
-const getPhoto = async(id, token) => {
-    const config = requestConfig("GET", null, token)
-      
-    try {
-      const res = await fetch(api + "/photo/" + id, config)
-        .then((res) => res.json())
-        .catch((err) => err);
+const getPhoto = async (id, token) => {
+    const config = requestConfig("GET", null, token);
 
-        return res;
+    try {
+        const res = await fetch(api + "/photos/" + id, config);
+
+        if(!res.ok){
+            const errorText = await res.text();
+            throw new Error(`Erro ao buscar a foto: ${res.status} - ${errorText}`)
+        }
+
+        const data = await res.json();
+
+        return data;
     } catch (error) {
-        console.log(error)  
+        console.error("Error em getPhoto", error.message);
+        return {errors: [error.message]};
     }
 };
 
