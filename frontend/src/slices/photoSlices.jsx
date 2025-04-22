@@ -115,6 +115,13 @@ export const comment = createAsyncThunk("photo/comment/", async(commentData, thu
     return data;
 });
 
+// Get all photos
+export const getPhotos = createAsyncThunk("photo/getall/", async() => {
+    const data = await photoService.getPhotos();
+
+    return data;
+});
+
 export const photoSlice = createSlice({
     name: "photo",
     initialState,
@@ -246,7 +253,7 @@ export const photoSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
-        /*.addCase(getPhotos.pending, (state) => {
+        .addCase(getPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
@@ -257,7 +264,7 @@ export const photoSlice = createSlice({
             state.error = null;
             state.photos = action.payload;
         })
-        .addCase(searchPhotos.pending, (state) => {
+        /*.addCase(searchPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
         })

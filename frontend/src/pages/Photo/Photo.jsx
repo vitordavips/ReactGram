@@ -47,14 +47,14 @@ const Photo = () => {
 
   // Insert a comment
   const handleComment = (e) => {
-    e.preventDefault();
+    e.prevetDefault();
 
     const commentData = {
       comment: commentText,
-      id: photo._id
-    }
+      id: photo._id,
+    };
 
-    dispatch(comment(commentData))
+    dispatch(comment(photoData));
 
     setCommentText("");
 
@@ -85,7 +85,7 @@ const Photo = () => {
               <input type="submit" value="Enviar"/>
             </form>
             {photo.comments?.length === 0 && <p>Não há comentários...</p>}
-            {photo.comments.map((comment) => (
+            {photo.comments?.map((comment) => (
               <div className="comment" key={comment.comment}>
                   <div className="author">
                     {comment.userImage && (
