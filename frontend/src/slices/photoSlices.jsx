@@ -101,6 +101,11 @@ export const like = createAsyncThunk("photo/like/", async(id, thunkAPI) => {
     return data;
 });
 
+// Add comment to a photo
+export const comment = createAsyncThunk("photo/comment/", async(photoData, thunkAPI) => {
+
+});
+
 export const photoSlice = createSlice({
     name: "photo",
     initialState,

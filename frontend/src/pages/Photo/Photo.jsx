@@ -12,6 +12,7 @@ import PhotoItem from "../../components/PhotoItem";
 import { useEffect, useState } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { useParams } from "react-router-dom";
+import { useResetComponentMessage } from "../../hooks/useResetComponentMessage";
 
 // Redux
 import { getPhoto, like } from "../../slices/photoSlices";
@@ -22,8 +23,9 @@ const Photo = () => {
 
   const dispatch = useDispatch();
 
+  const resetMessage = useResetComponentMessage(dispatch)
+
   const {user} = useSelector((state) => state.auth);
-  
   const {photo, loading, error, message} = useSelector(
     (state) => state.photo
   );
@@ -38,6 +40,8 @@ const Photo = () => {
   //like photo
   const handleLike = () => {
     dispatch(like(photo._id));
+
+    resetMessage();
   };
 
   if(loading){
@@ -48,8 +52,12 @@ const Photo = () => {
     <div id="photo">
         <PhotoItem photo={photo}/>
         <LikeContainer photo={photo} user={user} handleLike={handleLike}/>
+        <div>
+          {error && <Message msg={error} type={error}/>}
+          {message && <Message msg/>}
+        </div>
     </div>
   )
-}
+};
 
 export default Photo
