@@ -102,8 +102,17 @@ export const like = createAsyncThunk("photo/like/", async(id, thunkAPI) => {
 });
 
 // Add comment to a photo
-export const comment = createAsyncThunk("photo/comment/", async(photoData, thunkAPI) => {
+export const comment = createAsyncThunk("photo/comment/", async(commentData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
 
+    const data = await photoService.comment({comment: commentData.comment}, photo.id, token)
+
+    //check for erros
+    if(data.errors){
+        return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
 });
 
 export const photoSlice = createSlice({
@@ -224,7 +233,7 @@ export const photoSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
-        /*.addCase(comment.fulfilled, (state, action) => {
+        .addCase(comment.fulfilled, (state, action) => {
             state.loading = false;
             state.success = true;
             state.error = null;
@@ -237,7 +246,7 @@ export const photoSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
-        .addCase(getPhotos.pending, (state) => {
+        /*.addCase(getPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
@@ -248,7 +257,7 @@ export const photoSlice = createSlice({
             state.error = null;
             state.photos = action.payload;
         })
-        /*.addCase(searchPhotos.pending, (state) => {
+        .addCase(searchPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
         })

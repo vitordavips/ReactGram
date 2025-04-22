@@ -11,13 +11,14 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
+import EditProfile from './pages/EditProfile/EditProfile.jsx';
+import Profile from './pages/Profile/Profile.jsx';
+import Photo from "./pages/Photo/Photo.jsx";
 
 //components
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
-import EditProfile from './pages/EditProfile/EditProfile.jsx';
-import Profile from './pages/Profile/Profile.jsx';
-import Photo from './pages/Photo/Photo.jsx';
+
 
 function App() {
   const {auth, loading} = useAuth();
