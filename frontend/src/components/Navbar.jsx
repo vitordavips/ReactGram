@@ -20,6 +20,8 @@ const Navbar = () => {
     // Seleciona o estado atual do usuário autenticado
     const { user } = useSelector((state) => state.auth);
 
+    const [query, setQuery] = useState("");
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -29,6 +31,14 @@ const Navbar = () => {
         dispatch(reset());
 
         navigate("/login");
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+
+        if(query){
+            return navigate(`/search?q=${query}`);
+        }
     };
 
     return (
@@ -41,7 +51,11 @@ const Navbar = () => {
                 {/* Ícone de pesquisa */}
                 <BsSearch />
                 {/* Campo de entrada para pesquisa */}
-                <input type="text" placeholder='Pesquisar' />
+                <input 
+                    type="text" 
+                    placeholder='Pesquisar' 
+                    onChange={(e) => setQuery(e.target.value)
+                }/>
             </form>
 
             {/* Links de navegação */}
