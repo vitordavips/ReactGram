@@ -4,7 +4,7 @@ import "./Search.css";
 import { useEffect } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useResetComponentMessage} from "../../hooks/useResetComponentMessage";
-import {useQuey} from "../../hooks/useQuery";
+import {useQuery} from "../../hooks/useQuery";
 
 // components
 import LikeContainer from "../../components/LikeContainer";
@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { searchPhotos, like } from "../../slices/photoSlices";
 
 const Search = () => {
-    const query = useQuey();
+    const query = useQuery();
     const search = query.get("q");
 
     const dispatch = useDispatch();

@@ -1,110 +1,99 @@
-import './Navbar.css';
+import "./Navbar.css";
 
-//components
-import { NavLink, Link } from 'react-router-dom';
-import {BsSearch, BsHouseDoorFill, BsFillCameraFill, BsFillPersonFill} from "react-icons/bs";
+// Components
+import { NavLink, Link } from "react-router-dom";
+import {
+  BsSearch,
+  BsHouseDoorFill,
+  BsFillPersonFill,
+  BsFillCameraFill,
+} from "react-icons/bs";
 
 // Hooks
-import { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-//Redux
-import {logout, reset} from '../slices/authSlice.jsx';
+// Redux
+import { logout, reset } from "../slices/authSlice";
 
 const Navbar = () => {
-    // Hook para obter informações de autenticação
-    const { auth } = useAuth();
+  const { auth } = useAuth();
+  const { user } = useSelector((state) => state.auth);
 
-    // Seleciona o estado atual do usuário autenticado
-    const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-    const [query, setQuery] = useState("");
+  const dispatch = useDispatch();
 
-    const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
-    const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
 
-    const handleLogout = () => {
-        dispatch(logout());
-        dispatch(reset());
+    navigate("/login");
+  };
 
-        navigate("/login");
-    };
+  const handleSearch = (e) => {
+    e.preventDefault();
 
-    const handleSearch = (e) => {
-        e.preventDefault();
+    if (query) {
+      return navigate(`/search?q=${query}`);
+    }
+  };
 
-        if(query){
-            return navigate(`/search?q=${query}`);
-        }
-    };
-
-    return (
-        <nav id='nav'>
-            {/* Link principal para a página inicial */}
-            <Link to="/">ReactGram</Link>
-
-            {/* Formulário para realizar a pesquisa */}
-            <form>
-                {/* Ícone de pesquisa */}
-                <BsSearch />
-                {/* Campo de entrada para pesquisa */}
-                <input 
-                    type="text" 
-                    placeholder='Pesquisar' 
-                    onChange={(e) => setQuery(e.target.value)
-                }/>
-            </form>
-
-            {/* Links de navegação */}
-            <ul id="nav-links">
-                {/* Renderização condicional baseada na autenticação */}
-                {auth ? (
-                    <>
-                        {/* Link para a página inicial */}
-                        <li>
-                            <NavLink to="/">
-                                <BsHouseDoorFill />
-                            </NavLink>
-                        </li>
-
-                        {/* Link para a página do usuário, exibido somente se o usuário estiver definido */}
-                        {user && (
-                            <li>
-                                <NavLink to={`/users/${user._id}`}>
-                                    <BsFillCameraFill />
-                                </NavLink>
-                            </li>
-                        )}
-
-                        {/* Link para o perfil do usuário */}
-                        <li>
-                            <NavLink to="/profile">
-                                <BsFillPersonFill />
-                            </NavLink>
-                        </li>
-
-                        {/* Opção para sair */}
-                        <li>
-                            <span onClick={handleLogout}>Sair</span>
-                        </li>
-                    </>
-                ) : (
-                    <>
-                        {/* Links para login e registro, exibidos quando o usuário não está autenticado */}
-                        <li>
-                            <NavLink to="/login">Entrar</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/register">Cadastrar</NavLink>
-                        </li>
-                    </>
-                )}
-            </ul>
-        </nav>
-    );
+  return (
+    <nav id="nav">
+      <Link to="/">
+        <h2>ReactGram</h2>
+      </Link>
+      <form id="search-form" onSubmit={handleSearch}>
+        <BsSearch />
+        <input
+          type="text"
+          placeholder="Pesquisar"
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </form>
+      <ul id="nav-links">
+        {auth ? (
+          <>
+            <li>
+              <NavLink to="/">
+                <BsHouseDoorFill />
+              </NavLink>
+            </li>
+            {user && (
+              <li>
+                <NavLink to={`/users/${user._id}`}>
+                  <BsFillCameraFill />
+                </NavLink>
+              </li>
+            )}
+            <li>
+              <NavLink to="/profile">
+                <BsFillPersonFill />
+              </NavLink>
+            </li>
+            <li>
+              <span onClick={handleLogout}>Sair</span>
+            </li>
+          </>
+        ) : (
+          <>
+            {" "}
+            <li>
+              <NavLink to="/login">Entrar</NavLink>
+            </li>
+            <li>
+              <NavLink to="/register">Cadastrar</NavLink>
+            </li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
 };
 
 export default Navbar;
