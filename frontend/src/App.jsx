@@ -31,7 +31,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename='/ReactGram'>
         <Navbar />
         <div className='container'>
           <Routes>

@@ -82,35 +82,32 @@ const getPhoto = async(id, token) => {
 }
 
 // Like a photo
-const like = async(id, token) => {
+const like = async (id, token) => {
     const config = requestConfig("PUT", null, token);
-
+  
     try {
-        const res = await fetch(`${api}/photos/like/${id}`, config);
-        const data = await res.json();
-
-        if(!res.ok){
-            throw new Error(data.errors ? data.errors[0] : "Erro ao curitir a foto");
-        }
-
-        return data;
+      const res = await fetch(api + "/photos/like/" + id, config)
+        .then((res) => res.json())
+        .catch((err) => err);
+  
+      return res;
     } catch (error) {
-        console.log("erro no like", error.message);
-        return{errors : [error.message]};
+      console.log(error);
     }
 };
 
 // Add comment to a photo
 const comment = async (data, id, token) => {
     const config = requestConfig("PUT", data, token);
-
+  
     try {
-        const res = await fetch(api + "/photos/comment/" + id, config)
-            .then((res) => res.json())
-            .catch((err) => err);
-        return res;
+      const res = await fetch(api + "/photos/comment/" + id, config)
+        .then((res) => res.json())
+        .catch((err) => err);
+  
+      return res;
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
 };
 
