@@ -1,3 +1,47 @@
-.container{
+.container {
     min-height: 70vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Auth Pages Centering Global Rule */
+#login, #register {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    max-width: 450px;
+    margin: 4rem auto;
+    text-align: center;
+}
+
+#login h2, #register h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: var(--accent-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#login p, #register p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+#login p a, #register p a {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+#login p a:hover, #register p a:hover {
+    text-decoration: underline;
 }

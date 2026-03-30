@@ -19,25 +19,14 @@ export const profile = createAsyncThunk(
         // chama o serviço para buscar os dados do perfil do usuário
         const data = await userService.profile(user, token);
 
+        // Check for errors
+        if (data.errors) {
+            return thunkAPI.rejectWithValue(data.errors[0]);
+        }
+
         return data;
-    },
-    {
-        extraReducers: (builder) => {
-            builder
-                  .addCase(profile.pending, (state) => {
-                    state.loading = true;
-                    state.error = null;
-                  })
-                  
-                  // Lida com o estado quando a ação register é concluída com sucesso
-                  .addCase(profile.fulfilled, (state, action) => {
-                    state.loading = false;
-                    state.success = true;
-                    state.error = null;
-                    state.user = action.payload;
-                  })
-        },
-});
+    }
+);
 
 // Update user details
 export const updateProfile = createAsyncThunk(
@@ -62,6 +51,11 @@ export const getUserDetails = createAsyncThunk(
     async (id, thunkAPI) => {
         const data = await userService.getUserDetails(id);
 
+        // Check for errors
+        if (data.errors) {
+            return thunkAPI.rejectWithValue(data.errors[0]);
+        }
+
         return data;
     }
 );
@@ -85,6 +79,11 @@ export const userSlice = createSlice({
                 state.success = true;
                 state.error = null;
                 state.user = action.payload;
+            })
+            .addCase(profile.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.user = {};
             })
             .addCase(updateProfile.pending, (state) => {
                 state.loading = true;
@@ -111,6 +110,11 @@ export const userSlice = createSlice({
                 state.success = true;
                 state.error = null;
                 state.user = action.payload;
+            })
+            .addCase(getUserDetails.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.user = {};
             });
     },
 });
