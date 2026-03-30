@@ -1,44 +1,84 @@
 #nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #000;
-  border-bottom: 1px solid #363636;
-  padding: 0.1em 1em;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(20, 20, 20, 0.7); /* Deep dark glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+  
+  #nav h2 {
+      margin: 0;
+      background: var(--accent-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      font-size: 1.8rem;
+  }
+  
+  #search-form {
+    position: relative;
+    width: 25%;
+    min-width: 250px;
+  }
+  
+  #search-form svg {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+  
+  #search-form input {
+    padding: 10px 14px 10px 2.8em;
+    border-radius: var(--radius-full);
+    width: 100%;
+    margin: 0;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: transparent;
+  }
+  
+  #search-form input:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(0, 148, 246, 0.2);
+  }
+  
+  #nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  #nav-links li {
+    margin: 0;
+  }
+  
+  #nav-links span {
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+  
+  #nav-links svg {
+    font-size: 1.5rem;
+    transition: transform var(--transition-fast), color var(--transition-fast);
+    color: var(--text-secondary);
+  }
+  
+  #nav-links a:hover svg, #nav-links span:hover svg {
+      color: var(--accent-color);
+      transform: scale(1.1);
+  }
 
-#search-form {
-  position: relative;
-  width: 20%;
-}
-
-#search-form svg {
-  position: absolute;
-  top: 10px;
-  left: 9px;
-}
-
-#search-form input {
-  padding-left: 2.5em;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  margin: 0;
-}
-
-#nav-links {
-  display: flex;
-  align-items: center;
-}
-
-#nav-links li {
-  margin-right: 1em;
-}
-
-#nav-links span {
-  cursor: pointer;
-}
-
-#nav-links svg {
-  font-size: 1.5em;
-}
+  .active svg {
+      color: var(--accent-color) !important;
+  }

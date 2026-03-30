@@ -16,7 +16,6 @@ const conn = async () => {
         console.log("Conectou ao banco!");
         
         return dbConn;
-
     } catch(error) {
         console.log(error);
     }

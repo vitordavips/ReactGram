@@ -1,5 +1,5 @@
 // Essas funções são utilizadas para simplificar a criação de reducers e gerenciamento de ações assíncronas.
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isRejected } from "@reduxjs/toolkit";
 
 // Importa o serviço de autenticação que contém funções relacionadas ao registro e login de usuários.
 import authService from "../services/authService.jsx";
@@ -109,6 +109,13 @@ export const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.user = null;
+      })
+      .addMatcher(isRejected, (state, action) => {
+        if (action.payload === "Token expirado, faça login novamente.") {
+          state.user = null;
+          state.success = false;
+          localStorage.removeItem("user");
+        }
       });
   },
 });

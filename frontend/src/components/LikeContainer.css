@@ -1,19 +1,43 @@
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.25); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+}
+
 .like {
     display: flex;
     align-items: center;
-    border-top: 1px solid #363636;
-    border-bottom: 1px solid #363636;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.2rem;
+    background: rgba(255, 255, 255, 0.01);
 }
   
 #home .like {
     border: none;
+    padding: 0 1.2rem 1rem 1.2rem;
+    background: transparent;
 }
   
 .like svg {
-    font-size: 1.5em;
+    font-size: 1.6rem;
     cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.like svg:hover {
+    filter: brightness(1.2);
+}
+
+.like svg:active {
+    animation: heartbeat 0.4s ease-in-out;
 }
   
 .like p {
-    margin-left: 1em;
+    margin: 0;
+    margin-left: 0.8em;
+    font-weight: 500;
+    color: var(--text-primary);
 }

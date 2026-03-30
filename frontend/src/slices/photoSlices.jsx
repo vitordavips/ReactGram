@@ -38,6 +38,11 @@ export const getUserPhotos = createAsyncThunk(
       console.log(data);
       console.log(data.errors);
   
+      // Check for errors
+      if (data.errors) {
+        return thunkAPI.rejectWithValue(data.errors[0]);
+      }
+  
       return data;
     }
 );
@@ -135,6 +140,11 @@ export const getPhotos = createAsyncThunk(
 
     const data = await photoService.getPhotos(token);
 
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
     return data;
 });
 
@@ -145,6 +155,11 @@ export const searchPhotos = createAsyncThunk(
         const token = thunkAPI.getState().auth.user.token;
 
         const data = await photoService.searchPhotos(useQuery, token);
+
+        // Check for errors
+        if (data.errors) {
+          return thunkAPI.rejectWithValue(data.errors[0]);
+        }
 
         return data;
     }
@@ -186,6 +201,11 @@ export const photoSlice = createSlice({
             state.success = true;
             state.error = null;
             state.photos = action.payload;
+        })
+        .addCase(getUserPhotos.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photo = null;
         })
         .addCase(getPhoto.pending, (state) => {
             state.loading = true;
@@ -292,6 +312,11 @@ export const photoSlice = createSlice({
             state.error = null;
             state.photos = action.payload;
         })
+        .addCase(getPhotos.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photos = [];
+        })
         .addCase(searchPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -302,6 +327,11 @@ export const photoSlice = createSlice({
             state.success = true;
             state.error = null;
             state.photos = action.payload;
+        })
+        .addCase(searchPhotos.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.photos = [];
         });
     },
 });

@@ -7,7 +7,7 @@ const publishPhoto = async (data, token) => {
     try{
         const res = await fetch(api + "/photos", config)
                     .then((res) => res.json())
-                    .catch((err) => err);
+                    .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
 
         return res;
     }
@@ -37,7 +37,7 @@ const deletePhoto = async(id, token) => {
         try {
             const res = await fetch(api + "/photos/" + id, config)
                 .then((res) => res.json())
-                .catch((err) => err);
+                .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
             
             return res;
         } catch (error) {
@@ -88,7 +88,7 @@ const like = async (id, token) => {
     try {
       const res = await fetch(api + "/photos/like/" + id, config)
         .then((res) => res.json())
-        .catch((err) => err);
+        .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
   
       return res;
     } catch (error) {
@@ -103,7 +103,7 @@ const comment = async (data, id, token) => {
     try {
       const res = await fetch(api + "/photos/comment/" + id, config)
         .then((res) => res.json())
-        .catch((err) => err);
+        .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
   
       return res;
     } catch (error) {
@@ -118,7 +118,7 @@ const getPhotos = async (token) => {
     try {
         const res = await fetch(api + "/photos/", config)
             .then((res) => res.json())
-            .catch((err) => err);
+            .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
         return res;
     } catch (error) {
         console.log(error)
@@ -132,7 +132,7 @@ const searchPhotos = async(query, token) => {
     try {
         const res = await fetch(api + "/photos/search?q=" + query, config)
             .then((res) => res.json())
-            .catch((err) => err);
+            .catch((err) => ({errors: ["Houve um erro no servidor!"]}));
         
         return res;
     } catch (error) {
