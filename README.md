@@ -28,15 +28,19 @@ A aplicação foi desenvolvida com as seguintes tecnologias:
 Crie uma pasta chamada "docs" e adicione as imagens lá para que possam ser carregadas pelo GitHub:
 
 ### Autenticação 
-![Tela de Autenticação](./docs/login.png)
-![Tela de Registro](./docs/register.png)
+(./docs/l<img width="1348" height="590" alt="Captura de tela 2026-03-29 212936" src="https://github.com/user-attachments/assets/d1334c54-2ff1-4201-aebd-328494d919db" />
+ogin.png)
+<img width="1359" height="591" alt="Captura de tela 2026-03-29 212955" src="https://github.com/user-attachments/assets/a9d9808b-0514-4ca4-928b-1caee4a31647" />
+
 
 ### Edição de Perfil
-![Configurações do Perfil](./docs/edit-profile.png)
+<img width="1355" height="594" alt="Captura de tela 2026-03-29 213049" src="https://github.com/user-attachments/assets/c7974550-551c-47b6-a5eb-d5d9c6875b8a" />
+
+<img width="1342" height="584" alt="Captura de tela 2026-03-29 213129" src="https://github.com/user-attachments/assets/36988f14-bf0f-4080-96b0-130ce637033c" />
+
 
 ### Interação e Visualização
-![Feed Principal](./docs/feed.png)
-![Visualização Direta da Foto](./docs/photo-view.png)
+<img width="1353" height="588" alt="Captura de tela 2026-03-29 213208" src="https://github.com/user-attachments/assets/e6c6c17f-85a1-4d2a-86f6-64e9a7a3b0cb" />
 
 ## Como rodar o projeto localmente
 
